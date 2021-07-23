@@ -1,5 +1,12 @@
+import React from 'react';
+import Layout from '../components/Layout';
+
 const Home = () => {
-  return <div>Hello NextJS</div>;
+  return (
+    <Layout>
+      <div>Hello NextJS</div>
+    </Layout>
+  );
 };
 
 export default Home;
