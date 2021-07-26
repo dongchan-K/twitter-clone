@@ -21,7 +21,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
   const onSubmitForm = useCallback(() => {
     console.log(id, password);
     setIsLoggedIn(true);
-  }, [id, password]);
+  }, [id, password, setIsLoggedIn]);
 
   const styleCaching = useMemo(() => ({ marginTop: 10 }), []);
 
