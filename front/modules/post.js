@@ -12,10 +12,10 @@ export const initialState = {
           src: 'https://newsimg.hankookilbo.com/cms/articlerelease/2021/04/01/57f00c7a-6fb6-49b1-905f-2438e4f7897a.jpg',
         },
         {
-          src: 'https://lh3.googleusercontent.com/proxy/xBlZP2r8LH5-uu6S5SvHijjCJZ8g_DZQteUi7zrvSzGl3mplWqBO4QLPF-JtrUwog-Vzyq97b0cZqbsgxUHtN0GCygH51-iicnHR6TqKGbQyWhRz3UM',
+          src: 'https://newsimg.sedaily.com/2020/08/14/1Z6KQFT39O_2.jpg',
         },
         {
-          src: 'https://thx.us-east-1.linodeobjects.com/coverimages/m_34/%EA%B5%90%EC%9A%94_34.jpg',
+          src: 'https://file.mk.co.kr/meet/neds/2019/12/image_readtop_2019_1044263_15761995784012463.png',
         },
       ],
       Comments: [
