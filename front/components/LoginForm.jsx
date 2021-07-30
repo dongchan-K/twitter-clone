@@ -4,7 +4,7 @@ import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
 import { useDispatch } from 'react-redux';
-import { loginAction } from '../modules';
+import { loginAction } from '../modules/user';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
