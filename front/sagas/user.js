@@ -9,7 +9,6 @@ const logoutAPI = () => axios.post('/api/logout');
 function* login(action) {
   yield put(startLoadingAction(action.type));
   try {
-    console.log('login saga');
     // const res = yield call(loginAPI);
     yield delay(1000);
     yield put({
