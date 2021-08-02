@@ -35,13 +35,10 @@ export const initialState = {
     },
   ],
   imagePaths: [],
-  postAdded: false,
+  postError: null,
 };
 
-const ADD_POST = 'post/ADD_POST';
-
-export const addPostRequestAction = () => ({ type: ADD_POST });
-
+// 더미 데이터
 const dummyPost = {
   id: 2,
   content: '더미 데이터',
@@ -50,15 +47,49 @@ const dummyPost = {
   Comments: [],
 };
 
+export const ADD_POST_REQUEST = 'post/ADD_POST_REQUEST';
+export const ADD_POST_SUCCESS = 'post/ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'post/ADD_POST_FAILURE';
+
+export const ADD_COMMENT_REQUEST = 'post/ADD_COMMENT_REQUEST';
+export const ADD_COMMENT_SUCCESS = 'post/ADD_COMMENT_SUCCESS';
+export const ADD_COMMENT_FAILURE = 'post/ADD_COMMENT_FAILURE';
+
+// action creator
+export const addPostRequestAction = (payload) => ({
+  type: ADD_POST_REQUEST,
+  payload,
+});
+
+export const addCommentRequestAction = (payload) => ({
+  type: ADD_COMMENT_REQUEST,
+  payload,
+});
+
+// reducer
 const post = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_POST:
+    case ADD_POST_SUCCESS:
       return {
         ...state,
         mainPosts: [dummyPost, ...state.mainPosts],
-        postAdded: true,
+        postError: null,
       };
-
+    case ADD_POST_FAILURE:
+      return {
+        ...state,
+        postError: action.error,
+      };
+    case ADD_COMMENT_SUCCESS:
+      return {
+        ...state,
+        postError: null,
+      };
+    case ADD_COMMENT_FAILURE:
+      return {
+        ...state,
+        postError: action.error,
+      };
     default:
       return state;
   }
