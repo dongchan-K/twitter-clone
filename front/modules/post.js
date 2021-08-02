@@ -39,7 +39,8 @@ export const initialState = {
 };
 
 const ADD_POST = 'post/ADD_POST';
-export const addPost = () => ({ type: ADD_POST });
+
+export const addPostRequestAction = () => ({ type: ADD_POST });
 
 const dummyPost = {
   id: 2,
@@ -57,6 +58,7 @@ const post = (state = initialState, action) => {
         mainPosts: [dummyPost, ...state.mainPosts],
         postAdded: true,
       };
+
     default:
       return state;
   }

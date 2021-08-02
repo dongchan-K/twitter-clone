@@ -6,9 +6,17 @@ import createSagaMiddleware from 'redux-saga';
 import reducer from '../modules';
 import rootSaga from '../sagas';
 
+const loggerMiddleware =
+  ({ dispatch, getState }) =>
+  (next) =>
+  (action) => {
+    console.log(action);
+    return next(action);
+  };
+
 const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
-  const middlewares = [sagaMiddleware];
+  const middlewares = [sagaMiddleware, loggerMiddleware];
   // 미들웨어를 적용하기 위한 enhancer 개발용에서는 devtools 사용 배포용에는 사용하지 않음
   const enhancer =
     process.env.NODE_ENV === 'production'

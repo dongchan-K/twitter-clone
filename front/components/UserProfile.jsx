@@ -1,14 +1,17 @@
 import React, { useCallback } from 'react';
 import { Card, Avatar, Button } from 'antd';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { logoutAction } from '../modules/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutRequestAction } from '../modules/user';
 
 const UserProfile = () => {
+  const { myInfo, loading } = useSelector(({ user, loading }) => ({
+    myInfo: user.myInfo,
+    loading: loading['user/LOG_OUT_REQUEST'],
+  }));
   const dispatch = useDispatch();
 
   const onLogOut = useCallback(() => {
-    dispatch(logoutAction());
+    dispatch(logoutRequestAction());
   }, [dispatch]);
 
   return (
@@ -28,8 +31,13 @@ const UserProfile = () => {
         </div>,
       ]}
     >
-      <Card.Meta avatar={<Avatar>ZC</Avatar>} title="DongChan" />
-      <Button onClick={onLogOut}>로그아웃</Button>
+      <Card.Meta
+        avatar={<Avatar>{myInfo?.nickname[0]}</Avatar>}
+        title={myInfo?.nickname}
+      />
+      <Button onClick={onLogOut} loading={loading}>
+        로그아웃
+      </Button>
     </Card>
   );
 };

@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
-import { useDispatch } from 'react-redux';
-import { loginAction } from '../modules/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginRequestAction } from '../modules/user';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -17,12 +17,15 @@ const FormWrapper = styled(Form)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const { loading } = useSelector(({ loading }) => ({
+    loading: loading['user/LOG_IN_REQUEST'],
+  }));
 
   const [id, onChangeId] = useInput('');
   const [password, onChangePassword] = useInput('');
 
   const onSubmitForm = useCallback(() => {
-    dispatch(loginAction({ id, password }));
+    dispatch(loginRequestAction({ id, password }));
   }, [id, password, dispatch]);
 
   const styleCaching = useMemo(() => ({ marginTop: 10 }), []);
@@ -45,7 +48,7 @@ const LoginForm = () => {
           required
         />
         <ButtonWrapper style={styleCaching}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={loading}>
             로그인
           </Button>
           <Link href="/signup">
