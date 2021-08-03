@@ -36,10 +36,10 @@ const dummyUser = (payload) => ({
 });
 
 // action creator
-export const loginRequestAction = ({ id, password }) => ({
+export const loginRequestAction = ({ email, password }) => ({
   type: LOG_IN_REQUEST,
   myInfo: {
-    id,
+    email,
     password,
   },
 });
@@ -48,8 +48,12 @@ export const logoutRequestAction = () => ({
   type: LOG_OUT_REQUEST,
 });
 
-export const signUpRequestAction = () => ({
+export const signUpRequestAction = ({ email, password }) => ({
   type: SIGN_UP_REQUEST,
+  signUpData: {
+    email,
+    password,
+  },
 });
 
 // reducer

@@ -30,7 +30,7 @@ const Global = createGlobalStyle`
 `;
 
 const Layout = ({ children }) => {
-  const { isLoggedIn } = useSelector((state) => state.user);
+  const { myInfo } = useSelector((state) => state.user);
 
   return (
     <div>
@@ -57,7 +57,7 @@ const Layout = ({ children }) => {
       </Menu>
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          {isLoggedIn ? <UserProfile /> : <LoginForm />}
+          {myInfo ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}

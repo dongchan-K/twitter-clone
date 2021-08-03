@@ -1,24 +1,30 @@
 import { Form, Input, Button } from 'antd';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPost } from '../modules/post';
+import useInput from '../hooks/useInput';
+import { addPost, addPostRequestAction } from '../modules/post';
 
 const PostForm = () => {
   const dispatch = useDispatch();
-  const { imagePaths } = useSelector((state) => state.post);
-  const [text, setText] = useState('');
+  const { imagePaths, postError } = useSelector(({ post }) => ({
+    imagePaths: post.imagePaths,
+    postError: post.postError,
+  }));
+  const [text, onChangeText, setText] = useInput('');
 
-  const imageInput = useRef();
-
-  const onChangeText = useCallback((e) => {
-    setText(e.target.value);
-  }, []);
+  // 정상적으로 게시물이 작성되었으면 게시물 창 초기화
+  useEffect(() => {
+    console.log(postError);
+    if (!postError) {
+      setText('');
+    }
+  }, [postError, setText]);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPost());
-    setText('');
-  }, [dispatch]);
+    dispatch(addPostRequestAction(text));
+  }, [dispatch, text]);
 
+  const imageInput = useRef();
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
   }, []);

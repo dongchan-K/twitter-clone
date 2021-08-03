@@ -1,14 +1,35 @@
-import React, { useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Form, Input } from 'antd';
 import useInput from '../hooks/useInput';
+import { addCommentRequestAction } from '../modules/post';
 
 const CommentForm = ({ post }) => {
-  const id = useSelector((state) => state.user.myInfo?.id);
-  const [commentText, onChangeCommentText] = useInput('');
+  const dispatch = useDispatch();
 
-  const onSubmitComment = useCallback(() => {}, [commentText]);
+  const { id, postError } = useSelector((state) => ({
+    id: state.user.myInfo,
+    postError: state.post.postError,
+  }));
+  const [commentText, onChangeCommentText, setCommentText] = useInput('');
+
+  // 정상적으로 코멘트가 작성되었으면 코멘트 창 초기화
+  useEffect(() => {
+    if (postError === null) {
+      setCommentText('');
+    }
+  }, [postError, setCommentText]);
+
+  const onSubmitComment = useCallback(() => {
+    dispatch(
+      addCommentRequestAction({
+        content: commentText,
+        postId: post.id,
+        userId: id,
+      }),
+    );
+  }, [dispatch, post.id, commentText, id]);
 
   return (
     <Form onFinish={onSubmitComment}>

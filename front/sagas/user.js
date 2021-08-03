@@ -67,6 +67,7 @@ function* signUp(action) {
       error: e.response.data,
     });
   }
+  yield put(endLoadingAction(action.type));
 }
 
 export default function* userWatcherSaga() {

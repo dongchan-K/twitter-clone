@@ -21,12 +21,12 @@ const LoginForm = () => {
     loading: loading['user/LOG_IN_REQUEST'],
   }));
 
-  const [id, onChangeId] = useInput('');
+  const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
   const onSubmitForm = useCallback(() => {
-    dispatch(loginRequestAction({ id, password }));
-  }, [id, password, dispatch]);
+    dispatch(loginRequestAction({ email, password }));
+  }, [email, password, dispatch]);
 
   const styleCaching = useMemo(() => ({ marginTop: 10 }), []);
 
@@ -34,9 +34,15 @@ const LoginForm = () => {
     // antd의 onFinish는 e.preventDefault()가 적용 되어있음
     <FormWrapper onFinish={onSubmitForm}>
       <div>
-        <label htmlFor="user-id">아이디</label>
+        <label htmlFor="user-email">이메일</label>
         <br />
-        <Input name="user-id" value={id} onChange={onChangeId} required />
+        <Input
+          name="user-email"
+          type="email"
+          value={email}
+          onChange={onChangeEmail}
+          required
+        />
       </div>
       <div>
         <label htmlFor="user-password">비밀번호</label>
