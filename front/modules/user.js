@@ -1,5 +1,4 @@
 export const initialState = {
-  isLoggedIn: false,
   userError: null,
   myInfo: null,
   signUpData: {},
@@ -17,6 +16,10 @@ export const LOG_OUT_FAILURE = 'user/LOG_OUT_FAILURE';
 export const SIGN_UP_REQUEST = 'user/SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'user/SIGN_UP_FAILURE';
+
+export const CHANGE_NICKNAME_REQUEST = 'user/CHANGE_NICKNAME_REQUEST';
+export const CHANGE_NICKNAME_SUCCESS = 'user/CHANGE_NICKNAME_SUCCESS';
+export const CHANGE_NICKNAME_FAILURE = 'user/CHANGE_NICKNAME_FAILURE';
 
 export const FOLLOW_REQUEST = 'user/FOLLOW_REQUEST';
 export const FOLLOW_SUCCESS = 'user/FOLLOW_SUCCESS';
@@ -36,24 +39,30 @@ const dummyUser = (payload) => ({
 });
 
 // action creator
-export const loginRequestAction = ({ email, password }) => ({
+export const loginRequestAction = (payload) => ({
   type: LOG_IN_REQUEST,
-  myInfo: {
-    email,
-    password,
-  },
+  payload,
 });
 
 export const logoutRequestAction = () => ({
   type: LOG_OUT_REQUEST,
 });
 
-export const signUpRequestAction = ({ email, password }) => ({
+export const signUpRequestAction = (payload) => ({
   type: SIGN_UP_REQUEST,
-  signUpData: {
-    email,
-    password,
-  },
+  payload,
+});
+
+export const changeNicknameRequestAction = () => ({
+  type: CHANGE_NICKNAME_REQUEST,
+});
+
+export const followRequestAction = () => ({
+  type: FOLLOW_REQUEST,
+});
+
+export const unfollowRequestAction = () => ({
+  type: UNFOLLOW_REQUEST,
 });
 
 // reducer
@@ -62,22 +71,19 @@ const user = (state = initialState, action) => {
     case LOG_IN_SUCCESS:
       return {
         ...state,
-        isLoggedIn: true,
-        userError: null,
         myInfo: dummyUser(action.payload),
+        userError: null,
       };
     case LOG_IN_FAILURE:
       return {
         ...state,
-        isLoggedIn: false,
         userError: action.error,
       };
     case LOG_OUT_SUCCESS:
       return {
         ...state,
-        isLoggedIn: false,
-        userError: null,
         myInfo: null,
+        userError: null,
       };
     case LOG_OUT_FAILURE:
       return {
@@ -90,6 +96,16 @@ const user = (state = initialState, action) => {
         userError: null,
       };
     case SIGN_UP_FAILURE:
+      return {
+        ...state,
+        userError: action.error,
+      };
+    case CHANGE_NICKNAME_SUCCESS:
+      return {
+        ...state,
+        userError: null,
+      };
+    case CHANGE_NICKNAME_FAILURE:
       return {
         ...state,
         userError: action.error,

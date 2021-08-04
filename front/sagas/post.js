@@ -22,6 +22,7 @@ function* addPost(action) {
     yield delay(1000);
     yield put({
       type: ADD_POST_SUCCESS,
+      payload: action.payload,
     });
   } catch (e) {
     yield put({
@@ -39,6 +40,7 @@ function* addComment(action) {
     yield delay(1000);
     yield put({
       type: ADD_COMMENT_SUCCESS,
+      payload: action.payload,
     });
   } catch (e) {
     yield put({

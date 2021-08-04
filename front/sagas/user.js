@@ -26,7 +26,7 @@ function* login(action) {
     yield delay(1000);
     yield put({
       type: LOG_IN_SUCCESS,
-      payload: action.myInfo,
+      payload: action.payload,
     });
   } catch (e) {
     yield put({
@@ -60,6 +60,7 @@ function* signUp(action) {
     yield delay(1000);
     yield put({
       type: SIGN_UP_SUCCESS,
+      payload: action.payload,
     });
   } catch (e) {
     yield put({

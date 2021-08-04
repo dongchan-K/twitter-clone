@@ -8,9 +8,10 @@ import { addCommentRequestAction } from '../modules/post';
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch();
 
-  const { id, addCommentDone } = useSelector((state) => ({
+  const { id, addCommentDone, loading } = useSelector((state) => ({
     id: state.user.myInfo,
     addCommentDone: state.post.addCommentDone,
+    loading: state.loading['user/ADD_COMMENT_REQUEST'],
   }));
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
 
@@ -39,7 +40,12 @@ const CommentForm = ({ post }) => {
           onChange={onChangeCommentText}
           rows={4}
         />
-        <Button type="primary" htmlType="submit">
+        <Button
+          style={{ position: 'absolute', right: 0, bottom: -40, zIndex: 1 }}
+          type="primary"
+          htmlType="submit"
+          loading={loading}
+        >
           삐빅
         </Button>
       </Form.Item>

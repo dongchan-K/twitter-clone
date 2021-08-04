@@ -1,3 +1,5 @@
+import shortId from 'shortid';
+
 export const initialState = {
   mainPosts: [
     {
@@ -41,13 +43,19 @@ export const initialState = {
 };
 
 // 더미 데이터
-const dummyPost = {
-  id: 2,
-  content: '더미 데이터',
+const dummyPost = (payload) => ({
+  id: shortId.generate(),
+  content: payload,
   User: { id: 1, nickname: '동찬' },
   Images: [],
   Comments: [],
-};
+});
+
+const dummyComment = (payload) => ({
+  id: shortId.generate(),
+  content: payload,
+  User: { id: 1, nickname: '동찬' },
+});
 
 export const ADD_POST_REQUEST = 'post/ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'post/ADD_POST_SUCCESS';
@@ -80,7 +88,7 @@ const post = (state = initialState, action) => {
     case ADD_POST_SUCCESS:
       return {
         ...state,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        mainPosts: [dummyPost(action.payload), ...state.mainPosts],
         addPostDone: true,
       };
     case ADD_POST_FAILURE:
@@ -94,11 +102,20 @@ const post = (state = initialState, action) => {
         addCommentDone: false,
         postError: null,
       };
-    case ADD_COMMENT_SUCCESS:
+    case ADD_COMMENT_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(
+        (mainPost) => mainPost.id === action.payload.postId,
+      );
+      const post = { ...state.mainPosts[postIndex] };
+      post.Comments = [dummyComment(action.payload.content), ...post.Comments];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = post;
       return {
         ...state,
+        mainPosts,
         addCommentDone: true,
       };
+    }
     case ADD_COMMENT_FAILURE:
       return {
         ...state,
