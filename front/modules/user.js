@@ -1,3 +1,5 @@
+import produce from 'immer';
+
 export const initialState = {
   userError: null,
   myInfo: null,
@@ -70,70 +72,62 @@ export const unfollowRequestAction = () => ({
 
 // reducer
 const user = (state = initialState, action) => {
-  switch (action.type) {
-    case LOG_IN_SUCCESS:
-      return {
-        ...state,
-        myInfo: dummyUser(action.payload),
-        userError: null,
-      };
-    case LOG_IN_FAILURE:
-      return {
-        ...state,
-        userError: action.error,
-      };
-    case LOG_OUT_SUCCESS:
-      return {
-        ...state,
-        myInfo: null,
-        userError: null,
-      };
-    case LOG_OUT_FAILURE:
-      return {
-        ...state,
-        userError: action.error,
-      };
-    case SIGN_UP_SUCCESS:
-      return {
-        ...state,
-        userError: null,
-      };
-    case SIGN_UP_FAILURE:
-      return {
-        ...state,
-        userError: action.error,
-      };
-    case CHANGE_NICKNAME_SUCCESS:
-      return {
-        ...state,
-        userError: null,
-      };
-    case CHANGE_NICKNAME_FAILURE:
-      return {
-        ...state,
-        userError: action.error,
-      };
-    case ADD_POST_TO_ME:
-      return {
-        ...state,
-        myInfo: {
-          ...state.myInfo,
-          Posts: [{ id: action.payload }, ...state.myInfo.Posts],
-        },
-      };
-    case REMOVE_POST_OF_ME:
-      return {
-        ...state,
-        myInfo: {
-          ...state.myInfo,
-          Posts: state.myInfo.Posts.filter(
-            (Post) => Post.id !== action.payload,
-          ),
-        },
-      };
-    default:
-      return state;
-  }
+  return produce(state, (draft) => {
+    switch (action.type) {
+      case LOG_IN_SUCCESS:
+        draft.myInfo = dummyUser(action.payload);
+        draft.userError = null;
+        break;
+      case LOG_IN_FAILURE:
+        draft.userError = action.error;
+        break;
+      case LOG_OUT_SUCCESS:
+        draft.myInfo = null;
+        draft.userError = null;
+        break;
+      case LOG_OUT_FAILURE:
+        draft.userError = action.error;
+        break;
+      case SIGN_UP_SUCCESS:
+        draft.userError = null;
+        break;
+      case SIGN_UP_FAILURE:
+        draft.userError = action.error;
+        break;
+      case CHANGE_NICKNAME_SUCCESS:
+        draft.userError = null;
+        break;
+      case CHANGE_NICKNAME_FAILURE:
+        draft.userError = action.error;
+        break;
+      case ADD_POST_TO_ME:
+        draft.myInfo.unshift({ id: action.payload });
+        break;
+      // return {
+      //   ...state,
+      //   myInfo: {
+      //     ...state.myInfo,
+      //     Posts: [{ id: action.payload }, ...state.myInfo.Posts],
+      //   },
+      // };
+      case REMOVE_POST_OF_ME:
+        draft.myInfo.Posts = draft.myInfo.Posts.filter(
+          (Post) => Post.id !== action.payload,
+        );
+        break;
+      // return {
+      //   ...state,
+      //   myInfo: {
+      //     ...state.myInfo,
+      //     Posts: state.myInfo.Posts.filter(
+      //       (Post) => Post.id !== action.payload,
+      //     ),
+      //   },
+      // };
+      default:
+        break;
+    }
+  });
 };
 
 export default user;

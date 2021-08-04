@@ -1,4 +1,5 @@
 import shortId from 'shortid';
+import produce from 'immer';
 
 export const initialState = {
   mainPosts: [
@@ -93,73 +94,71 @@ export const removePostRequestAction = (payload) => ({
   payload,
 });
 
-// reducer
+// reducer => 이전 상태를 액션을 통해 다음 상태로 만들어내는 함수 / 불변성을 지켜야함
 const post = (state = initialState, action) => {
-  switch (action.type) {
-    case ADD_POST_REQUEST:
-      return {
-        ...state,
-        addPostDone: false,
-        postError: null,
-      };
-    case ADD_POST_SUCCESS:
-      return {
-        ...state,
-        mainPosts: [dummyPost(action.payload), ...state.mainPosts],
-        addPostDone: true,
-      };
-    case ADD_POST_FAILURE:
-      return {
-        ...state,
-        postError: action.error,
-      };
-    case ADD_COMMENT_REQUEST:
-      return {
-        ...state,
-        addCommentDone: false,
-        postError: null,
-      };
-    case ADD_COMMENT_SUCCESS: {
-      const postIndex = state.mainPosts.findIndex(
-        (mainPost) => mainPost.id === action.payload.postId,
-      );
-      const post = { ...state.mainPosts[postIndex] };
-      post.Comments = [dummyComment(action.payload.content), ...post.Comments];
-      const mainPosts = [...state.mainPosts];
-      mainPosts[postIndex] = post;
-      return {
-        ...state,
-        mainPosts,
-        addCommentDone: true,
-      };
-    }
-    case ADD_COMMENT_FAILURE:
-      return {
-        ...state,
-        postError: action.error,
-      };
-    case REMOVE_POST_REQUEST:
-      return {
-        ...state,
-        removePostDone: false,
-        postError: null,
-      };
-    case REMOVE_POST_SUCCESS:
-      return {
-        ...state,
-        mainPosts: state.mainPosts.filter(
+  // immer 사용시 state 아닌 draft 조작후 break 처리
+  return produce(state, (draft) => {
+    switch (action.type) {
+      case ADD_POST_REQUEST:
+        draft.addPostDone = false;
+        draft.postError = null;
+        break;
+      case ADD_POST_SUCCESS:
+        draft.mainPosts.unshift(dummyPost(action.payload));
+        draft.addPostDone = true;
+        break;
+      case ADD_POST_FAILURE:
+        draft.postError = action.error;
+        break;
+      case ADD_COMMENT_REQUEST:
+        draft.addCommentDone = false;
+        draft.postError = null;
+        break;
+      case ADD_COMMENT_SUCCESS: {
+        // 게시글 아이디가 postId와 일치하는 요소를 찾은 후
+        const post = draft.mainPosts.find(
+          (mainPost) => mainPost.id === action.postId,
+        );
+        // 해당 게시글에 댓글 추가
+        post.Comments.unshift(dummyComment(action.payload.content));
+        draft.addCommentDone = true;
+        break;
+        // const postIndex = draft.mainPosts.findIndex(
+        //   (mainPost) => mainPost.id === action.payload.postId,
+        // );
+        // const post = { ...state.mainPosts[postIndex] };
+        // post.Comments = [
+        //   dummyComment(action.payload.content),
+        //   ...post.Comments,
+        // ];
+        // const mainPosts = [...state.mainPosts];
+        // mainPosts[postIndex] = post;
+        // return {
+        //   ...state,
+        //   mainPosts,
+        //   addCommentDone: true,
+        // };
+      }
+      case ADD_COMMENT_FAILURE:
+        draft.postError = action.error;
+        break;
+      case REMOVE_POST_REQUEST:
+        draft.removePostDone = false;
+        draft.postError = null;
+        break;
+      case REMOVE_POST_SUCCESS:
+        draft.mainPosts = draft.mainPosts.filter(
           (mainPost) => mainPost.id !== action.payload,
-        ),
-        removePostDone: true,
-      };
-    case REMOVE_POST_FAILURE:
-      return {
-        ...state,
-        postError: action.error,
-      };
-    default:
-      return state;
-  }
+        );
+        draft.removePostDone = true;
+        break;
+      case REMOVE_POST_FAILURE:
+        draft.postError = action.error;
+        break;
+      default:
+        break;
+    }
+  });
 };
 
 export default post;
