@@ -2,8 +2,8 @@ import React, { useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
-import useInput from '../hooks/useInput';
 import { useDispatch, useSelector } from 'react-redux';
+import useInput from '../hooks/useInput';
 import { loginRequestAction } from '../modules/user';
 
 const ButtonWrapper = styled.div`

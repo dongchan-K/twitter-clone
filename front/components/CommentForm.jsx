@@ -8,18 +8,18 @@ import { addCommentRequestAction } from '../modules/post';
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch();
 
-  const { id, postError } = useSelector((state) => ({
+  const { id, addCommentDone } = useSelector((state) => ({
     id: state.user.myInfo,
-    postError: state.post.postError,
+    addCommentDone: state.post.addCommentDone,
   }));
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
 
   // 정상적으로 코멘트가 작성되었으면 코멘트 창 초기화
   useEffect(() => {
-    if (postError === null) {
+    if (addCommentDone) {
       setCommentText('');
     }
-  }, [postError, setCommentText]);
+  }, [addCommentDone, setCommentText]);
 
   const onSubmitComment = useCallback(() => {
     dispatch(

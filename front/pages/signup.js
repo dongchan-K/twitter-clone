@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import Layout from '../components/Layout';
-import Head from 'next/head';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Checkbox, Button } from 'antd';
 import styled from 'styled-components';
+import Head from 'next/head';
 import useInput from '../hooks/useInput';
+import Layout from '../components/Layout';
 import { signUpRequestAction } from '../modules/user';
-import { useDispatch, useSelector } from 'react-redux';
 
 const ErrorMessage = styled.div`
   color: red;

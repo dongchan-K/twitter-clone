@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { takeLatest, delay, all, put } from 'redux-saga/effects';
+import { takeLatest, delay, put } from 'redux-saga/effects';
 import { endLoadingAction, startLoadingAction } from '../modules/loading';
 import {
   ADD_POST_SUCCESS,

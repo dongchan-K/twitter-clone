@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { List, Button, Card } from 'antd';
 // Icon 라이브러리를 분리하여 성능 면에서 좋아짐 -> antd

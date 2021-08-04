@@ -17,10 +17,12 @@ const loading = (state = initialState, action) => {
   switch (action.type) {
     case START_LOADING:
       return {
+        ...state,
         [action.requestType]: true,
       };
     case END_LOADING:
       return {
+        ...state,
         [action.requestType]: false,
       };
     default:

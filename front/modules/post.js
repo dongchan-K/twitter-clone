@@ -36,6 +36,8 @@ export const initialState = {
   ],
   imagePaths: [],
   postError: null,
+  addPostDone: false,
+  addCommentDone: false,
 };
 
 // 더미 데이터
@@ -69,21 +71,33 @@ export const addCommentRequestAction = (payload) => ({
 // reducer
 const post = (state = initialState, action) => {
   switch (action.type) {
+    case ADD_POST_REQUEST:
+      return {
+        ...state,
+        addPostDone: false,
+        postError: null,
+      };
     case ADD_POST_SUCCESS:
       return {
         ...state,
         mainPosts: [dummyPost, ...state.mainPosts],
-        postError: null,
+        addPostDone: true,
       };
     case ADD_POST_FAILURE:
       return {
         ...state,
         postError: action.error,
       };
+    case ADD_COMMENT_REQUEST:
+      return {
+        ...state,
+        addCommentDone: false,
+        postError: null,
+      };
     case ADD_COMMENT_SUCCESS:
       return {
         ...state,
-        postError: null,
+        addCommentDone: true,
       };
     case ADD_COMMENT_FAILURE:
       return {
