@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Card, Popover, Avatar, List, Comment } from 'antd';
 import {
@@ -12,8 +12,16 @@ import {
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import { removePostRequestAction } from '../modules/post';
 
 const PostCard = ({ post }) => {
+  const dispatch = useDispatch();
+  // ?. 옵셔널 체이닝 연산자 => myInfo가 null 또는 undefined일 경우 undefined를 반환, 그렇지 않으면 id를 참조
+  const { id, loading } = useSelector((state) => ({
+    id: state.user.myInfo?.id,
+    loading: state.loading['post/REMOVE_POST_REQUEST'],
+  }));
+
   const [liked, setLiked] = useState(false);
   const [commentFormOpened, setcommentFormOpened] = useState(false);
 
@@ -25,8 +33,10 @@ const PostCard = ({ post }) => {
     setcommentFormOpened((prev) => !prev);
   }, []);
 
-  // ?. 옵셔널 체이닝 연산자 => myInfo가 null 또는 undefined일 경우 undefined를 반환, 그렇지 않으면 id를 참조
-  const id = useSelector((state) => state.user.myInfo?.id);
+  const onRemovePost = useCallback(() => {
+    dispatch(removePostRequestAction(post.id));
+  }, []);
+
   return (
     <div style={{ marginBottom: 20 }}>
       <Card
@@ -51,7 +61,13 @@ const PostCard = ({ post }) => {
                 {id && post.User.id === id ? (
                   <>
                     <Button>수정</Button>
-                    <Button type="danger">삭제</Button>
+                    <Button
+                      type="danger"
+                      loading={loading}
+                      onClick={onRemovePost}
+                    >
+                      삭제
+                    </Button>
                   </>
                 ) : (
                   <Button>신고</Button>

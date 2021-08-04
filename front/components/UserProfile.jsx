@@ -18,7 +18,7 @@ const UserProfile = () => {
     <Card
       actions={[
         <div key="twit">
-          짹쨱
+          게시글 수
           <br />
           {myInfo.Posts.length}
         </div>,

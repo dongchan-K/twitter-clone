@@ -29,13 +29,16 @@ export const UNFOLLOW_REQUEST = 'user/UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'user/UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'user/UNFOLLOW_FAILURE';
 
+export const ADD_POST_TO_ME = 'user/ADD_POST_TO_ME';
+export const REMOVE_POST_OF_ME = 'user/REMOVE_POST_OF_ME';
+
 const dummyUser = (payload) => ({
   ...payload,
   nickname: 'dongchan',
   id: 1,
-  Posts: [],
-  Followings: [],
-  Followers: [],
+  Posts: [{ id: 1 }],
+  Followings: [{ nickname: 'suck' }, { nickname: 'jung' }],
+  Followers: [{ nickname: 'suck' }],
 });
 
 // action creator
@@ -109,6 +112,24 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         userError: action.error,
+      };
+    case ADD_POST_TO_ME:
+      return {
+        ...state,
+        myInfo: {
+          ...state.myInfo,
+          Posts: [{ id: action.payload }, ...state.myInfo.Posts],
+        },
+      };
+    case REMOVE_POST_OF_ME:
+      return {
+        ...state,
+        myInfo: {
+          ...state.myInfo,
+          Posts: state.myInfo.Posts.filter(
+            (Post) => Post.id !== action.payload,
+          ),
+        },
       };
     default:
       return state;
