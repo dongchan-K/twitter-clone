@@ -1,5 +1,6 @@
 import shortId from 'shortid';
 import produce from 'immer';
+import faker from 'faker';
 
 export const initialState = {
   mainPosts: [
@@ -30,26 +31,54 @@ export const initialState = {
           content: '확인합니다.',
           User: {
             id: shortId.generate(),
-            nickname: '정진',
+            nickname: 'jungks',
           },
         },
         {
           id: shortId.generate(),
-          content: '이처니언!',
+          content: '좋아요!',
           User: {
             id: shortId.generate(),
-            nickname: '우딱',
+            nickname: 'wooddack',
           },
         },
       ],
     },
   ],
   imagePaths: [],
-  postError: null,
   addPostDone: false,
   addCommentDone: false,
   removePostDone: false,
+  postError: null,
 };
+
+// dummy Data
+initialState.mainPosts = initialState.mainPosts.concat(
+  Array(20)
+    .fill()
+    .map((v, i) => ({
+      id: shortId.generate(),
+      User: {
+        id: shortId.generate(),
+        nickname: faker.name.findName(),
+      },
+      content: faker.lorem.paragraph(),
+      Images: [
+        {
+          src: faker.image.image(),
+        },
+      ],
+      Comments: [
+        {
+          User: {
+            id: shortId.generate(),
+            nickname: faker.name.findName(),
+          },
+          content: faker.lorem.sentence(),
+        },
+      ],
+    })),
+);
 
 // 더미 데이터
 const dummyPost = (payload) => ({
