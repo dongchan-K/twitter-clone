@@ -4,57 +4,59 @@ import faker from 'faker';
 
 export const initialState = {
   mainPosts: [
-    {
-      id: 1,
-      User: {
-        id: 1,
-        nickname: '동찬',
-      },
-      content: '첫번째 게시글 #해시태그 #익스프레스',
-      Images: [
-        {
-          id: shortId.generate(),
-          src: 'https://newsimg.hankookilbo.com/cms/articlerelease/2021/04/01/57f00c7a-6fb6-49b1-905f-2438e4f7897a.jpg',
-        },
-        {
-          id: shortId.generate(),
-          src: 'https://newsimg.sedaily.com/2020/08/14/1Z6KQFT39O_2.jpg',
-        },
-        {
-          id: shortId.generate(),
-          src: 'https://file.mk.co.kr/meet/neds/2019/12/image_readtop_2019_1044263_15761995784012463.png',
-        },
-      ],
-      Comments: [
-        {
-          id: shortId.generate(),
-          content: '확인합니다.',
-          User: {
-            id: shortId.generate(),
-            nickname: 'jungks',
-          },
-        },
-        {
-          id: shortId.generate(),
-          content: '좋아요!',
-          User: {
-            id: shortId.generate(),
-            nickname: 'wooddack',
-          },
-        },
-      ],
-    },
+    // {
+    //   id: 1,
+    //   User: {
+    //     id: 1,
+    //     nickname: '동찬',
+    //   },
+    //   content: '첫번째 게시글 #해시태그 #익스프레스',
+    //   Images: [
+    //     {
+    //       id: shortId.generate(),
+    //       src: 'https://newsimg.hankookilbo.com/cms/articlerelease/2021/04/01/57f00c7a-6fb6-49b1-905f-2438e4f7897a.jpg',
+    //     },
+    //     {
+    //       id: shortId.generate(),
+    //       src: 'https://newsimg.sedaily.com/2020/08/14/1Z6KQFT39O_2.jpg',
+    //     },
+    //     {
+    //       id: shortId.generate(),
+    //       src: 'https://file.mk.co.kr/meet/neds/2019/12/image_readtop_2019_1044263_15761995784012463.png',
+    //     },
+    //   ],
+    //   Comments: [
+    //     {
+    //       id: shortId.generate(),
+    //       content: '확인합니다.',
+    //       User: {
+    //         id: shortId.generate(),
+    //         nickname: 'jungks',
+    //       },
+    //     },
+    //     {
+    //       id: shortId.generate(),
+    //       content: '좋아요!',
+    //       User: {
+    //         id: shortId.generate(),
+    //         nickname: 'wooddack',
+    //       },
+    //     },
+    //   ],
+    // },
   ],
   imagePaths: [],
+  hasMorePost: true,
+  loadPostDone: false,
   addPostDone: false,
   addCommentDone: false,
   removePostDone: false,
   postError: null,
 };
 
-// dummy Data
-initialState.mainPosts = initialState.mainPosts.concat(
-  Array(20)
+// 테스트용 더미 데이터 생성 함수
+export const generateDummyPost = (number) =>
+  Array(number)
     .fill()
     .map((v, i) => ({
       id: shortId.generate(),
@@ -77,8 +79,7 @@ initialState.mainPosts = initialState.mainPosts.concat(
           content: faker.lorem.sentence(),
         },
       ],
-    })),
-);
+    }));
 
 // 더미 데이터
 const dummyPost = (payload) => ({
@@ -95,6 +96,10 @@ const dummyComment = (payload) => ({
   User: { id: 1, nickname: '동찬' },
 });
 
+export const LOAD_POST_REQUEST = 'post/LOAD_POST_REQUEST';
+export const LOAD_POST_SUCCESS = 'post/LOAD_POST_SUCCESS';
+export const LOAD_POST_FAILURE = 'post/LOAD_POST_FAILURE';
+
 export const ADD_POST_REQUEST = 'post/ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'post/ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'post/ADD_POST_FAILURE';
@@ -108,6 +113,10 @@ export const ADD_COMMENT_SUCCESS = 'post/ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'post/ADD_COMMENT_FAILURE';
 
 // action creator
+export const loadPostRequestAction = () => ({
+  type: LOAD_POST_REQUEST,
+});
+
 export const addPostRequestAction = (payload) => ({
   type: ADD_POST_REQUEST,
   payload,
@@ -128,6 +137,18 @@ const post = (state = initialState, action) => {
   // immer 사용시 state 아닌 draft 조작후 break 처리
   return produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_POST_REQUEST:
+        draft.loadPostDone = false;
+        draft.postError = null;
+        break;
+      case LOAD_POST_SUCCESS:
+        draft.mainPosts = action.payload.concat(draft.mainPosts);
+        draft.loadPostDone = true;
+        draft.hasMorePost = draft.mainPosts.length < 50;
+        break;
+      case LOAD_POST_FAILURE:
+        draft.postError = action.error;
+        break;
       case ADD_POST_REQUEST:
         draft.addPostDone = false;
         draft.postError = null;

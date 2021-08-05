@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { takeLatest, delay, put } from 'redux-saga/effects';
+import { takeLatest, delay, put, throttle } from 'redux-saga/effects';
 import shortId from 'shortid';
 import { endLoadingAction, startLoadingAction } from '../modules/loading';
 import {
@@ -12,14 +12,37 @@ import {
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
   REMOVE_POST_FAILURE,
+  LOAD_POST_FAILURE,
+  LOAD_POST_SUCCESS,
+  LOAD_POST_REQUEST,
+  generateDummyPost,
 } from '../modules/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../modules/user';
 
+const loadPostAPI = () => axios.get('/api/post');
 const addPostAPI = (data) => axios.post('/api/post', data);
 const removePostAPI = (data) => axios.delete('/api/post', data);
 
 const addCommentAPI = (data) =>
   axios.post(`/api/post/${data.post.id}/comment`, data);
+
+function* loadPost(action) {
+  yield put(startLoadingAction(action.type));
+  try {
+    // const res = yield call(addPostAPI, action.payload);
+    yield delay(1000);
+    yield put({
+      type: LOAD_POST_SUCCESS,
+      payload: generateDummyPost(10),
+    });
+  } catch (e) {
+    yield put({
+      type: LOAD_POST_FAILURE,
+      error: e.response.data,
+    });
+  }
+  yield put(endLoadingAction(action.type));
+}
 
 function* addPost(action) {
   yield put(startLoadingAction(action.type));
@@ -88,6 +111,7 @@ function* addComment(action) {
 }
 
 export default function* postWatcherSaga() {
+  yield takeLatest(LOAD_POST_REQUEST, loadPost);
   yield takeLatest(ADD_POST_REQUEST, addPost);
   yield takeLatest(REMOVE_POST_REQUEST, removePost);
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
