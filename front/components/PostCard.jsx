@@ -12,7 +12,7 @@ import {
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
-import { removePostRequestAction } from '../modules/post';
+import { postActionCreator } from '../modules/post';
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
@@ -21,6 +21,8 @@ const PostCard = ({ post }) => {
     id: state.user.myInfo?.id,
     loading: state.loading['post/REMOVE_POST_REQUEST'],
   }));
+
+  const { removePostRequest } = postActionCreator;
 
   const [liked, setLiked] = useState(false);
   const [commentFormOpened, setcommentFormOpened] = useState(false);
@@ -34,7 +36,7 @@ const PostCard = ({ post }) => {
   }, []);
 
   const onRemovePost = useCallback(() => {
-    dispatch(removePostRequestAction(post.id));
+    dispatch(removePostRequest(post.id));
   }, []);
 
   return (

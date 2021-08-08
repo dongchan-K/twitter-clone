@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Layout from '../components/Layout';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
-import { loadPostRequestAction } from '../modules/post';
+import { postActionCreator } from '../modules/post';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -14,10 +14,12 @@ const Home = () => {
     loading: state.loading['post/LOAD_POST_REQUEST'],
   }));
 
+  const { loadPostRequest } = postActionCreator;
+
   // 최초에 게시물 불러오기
   useEffect(() => {
-    dispatch(loadPostRequestAction());
-  }, [dispatch]);
+    dispatch(loadPostRequest());
+  }, [loadPostRequest, dispatch]);
 
   // 스크롤 시 게시물 불러오기
   useEffect(() => {
@@ -28,7 +30,7 @@ const Home = () => {
       ) {
         // 더 불러올 게시물이 있고 로딩중이 아니라면 게시물을 불러옴
         if (hasMorePost && !loading) {
-          dispatch(loadPostRequestAction());
+          dispatch(loadPostRequest());
         }
       }
     };
@@ -37,7 +39,7 @@ const Home = () => {
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
-  }, [dispatch, hasMorePost, loading]);
+  }, [dispatch, hasMorePost, loading, loadPostRequest]);
 
   return (
     <Layout>

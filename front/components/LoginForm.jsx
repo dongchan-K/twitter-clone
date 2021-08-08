@@ -4,7 +4,7 @@ import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../hooks/useInput';
-import { loginRequestAction } from '../modules/user';
+import { userActionCreator } from '../modules/user';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -21,12 +21,14 @@ const LoginForm = () => {
     loading: loading['user/LOG_IN_REQUEST'],
   }));
 
+  const { loginRequest } = userActionCreator;
+
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
   const onSubmitForm = useCallback(() => {
-    dispatch(loginRequestAction({ email, password }));
-  }, [email, password, dispatch]);
+    dispatch(loginRequest({ email, password }));
+  }, [email, password, dispatch, loginRequest]);
 
   const styleCaching = useMemo(() => ({ marginTop: 10 }), []);
 

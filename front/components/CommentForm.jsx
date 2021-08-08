@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Form, Input } from 'antd';
 import useInput from '../hooks/useInput';
-import { addCommentRequestAction } from '../modules/post';
+import { postActionCreator } from '../modules/post';
 
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch();
@@ -15,6 +15,8 @@ const CommentForm = ({ post }) => {
   }));
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
 
+  const { addCommentRequest } = postActionCreator;
+
   // 정상적으로 코멘트가 작성되었으면 코멘트 창 초기화
   useEffect(() => {
     if (addCommentDone) {
@@ -24,13 +26,13 @@ const CommentForm = ({ post }) => {
 
   const onSubmitComment = useCallback(() => {
     dispatch(
-      addCommentRequestAction({
+      addCommentRequest({
         content: commentText,
         postId: post.id,
         userId: id,
       }),
     );
-  }, [dispatch, post.id, commentText, id]);
+  }, [dispatch, post.id, commentText, id, addCommentRequest]);
 
   return (
     <Form onFinish={onSubmitComment}>

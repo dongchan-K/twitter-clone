@@ -1,33 +1,20 @@
-export const initialState = {};
+import { createSlice } from '@reduxjs/toolkit';
 
-const START_LOADING = 'loading/START_LOADING';
-const END_LOADING = 'loading/END_LOADING';
+const initialState = {};
 
-export const startLoadingAction = (requestType) => ({
-  type: START_LOADING,
-  requestType,
+const loadingSlice = createSlice({
+  name: 'loading',
+  initialState,
+  reducers: {
+    startLoading: (state, { payload }) => {
+      state[payload] = true;
+    },
+    endLoading: (state, { payload }) => {
+      state[payload] = false;
+    },
+  },
 });
 
-export const endLoadingAction = (requestType) => ({
-  type: END_LOADING,
-  requestType,
-});
+export const loadingActionCreator = loadingSlice.actions;
 
-const loading = (state = initialState, action) => {
-  switch (action.type) {
-    case START_LOADING:
-      return {
-        ...state,
-        [action.requestType]: true,
-      };
-    case END_LOADING:
-      return {
-        ...state,
-        [action.requestType]: false,
-      };
-    default:
-      return state;
-  }
-};
-
-export default loading;
+export default loadingSlice;

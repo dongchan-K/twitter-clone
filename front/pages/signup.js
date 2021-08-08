@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Head from 'next/head';
 import useInput from '../hooks/useInput';
 import Layout from '../components/Layout';
-import { signUpRequestAction } from '../modules/user';
+import { userActionCreator } from '../modules/user';
 
 const ErrorMessage = styled.div`
   color: red;
@@ -22,6 +22,8 @@ const Signup = () => {
     loading: loading['user/SIGN_UP_REQUEST'],
   }));
 
+  const { signupRequest } = userActionCreator;
+
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
 
@@ -35,7 +37,7 @@ const Signup = () => {
   const onChangeTerm = useCallback((e) => {
     setTerm(e.target.checked);
     setTermError(false);
-  });
+  }, []);
 
   const onChangePasswordConfirm = useCallback(
     (e) => {
@@ -52,8 +54,8 @@ const Signup = () => {
     if (!term) {
       return setTermError(true);
     }
-    dispatch(signUpRequestAction({ email, password }));
-  }, [email, password, passwordConfirm, term]);
+    dispatch(signupRequest({ email, password }));
+  }, [email, password, passwordConfirm, term, dispatch, signupRequest]);
 
   return (
     <Layout>

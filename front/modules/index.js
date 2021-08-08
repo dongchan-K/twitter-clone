@@ -1,26 +1,28 @@
 import { HYDRATE } from 'next-redux-wrapper';
-import { combineReducers } from 'redux';
-import user from './user';
-import post from './post';
-import loading from './loading';
+import { createSlice } from '@reduxjs/toolkit';
+import loadingSlice from './loading';
+import postSlice from './post';
+import userSlice from './user';
 
-// 리듀서 : (이전상태, 액션) => 다음상태를 만듬
-const rootReducer = combineReducers({
-  // ssr을 위한 index 리듀서 추가
-  index: (state = {}, action) => {
-    switch (action.type) {
-      // next-redux-wrapper를 사용하기 위한 액션
-      case HYDRATE:
-        console.log('HYDRATE', action);
-        return { ...state, ...action.payload };
-
-      default:
-        return state;
-    }
+// ssr을 위한 index 리듀서 추가
+const indexSlice = createSlice({
+  name: 'index',
+  initialState: {},
+  // next-redux-wrapper를 사용하기 위한 액션
+  reducers: {
+    [HYDRATE]: (state, action) => {
+      console.log('HYDRATE', action);
+      return action.payload;
+    },
   },
-  user,
-  post,
-  loading,
 });
 
-export default rootReducer;
+// 리듀서 결합
+const reducer = {
+  index: indexSlice.reducer,
+  loading: loadingSlice.reducer,
+  user: userSlice.reducer,
+  post: postSlice.reducer,
+};
+
+export default reducer;

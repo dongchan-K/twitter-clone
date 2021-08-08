@@ -2,12 +2,14 @@ import { Form, Input, Button } from 'antd';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../hooks/useInput';
-import { addPostRequestAction } from '../modules/post';
+import { postActionCreator } from '../modules/post';
 
 const PostForm = () => {
   const dispatch = useDispatch();
   const { imagePaths, addPostDone } = useSelector((state) => state.post);
   const [text, onChangeText, setText] = useInput('');
+
+  const { addPostRequest } = postActionCreator;
 
   // 정상적으로 게시물이 작성되었으면 게시물 창 초기화
   useEffect(() => {
@@ -17,8 +19,8 @@ const PostForm = () => {
   }, [addPostDone, setText]);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPostRequestAction(text));
-  }, [dispatch, text]);
+    dispatch(addPostRequest(text));
+  }, [dispatch, text, addPostRequest]);
 
   const imageInput = useRef();
   const onClickImageUpload = useCallback(() => {
