@@ -7,7 +7,7 @@ const UserProfile = () => {
   const dispatch = useDispatch();
   const { myInfo, loading } = useSelector(({ user, loading }) => ({
     myInfo: user.myInfo,
-    loading: loading['user/LOG_OUT_REQUEST'],
+    loading: loading['user/logoutRequest'],
   }));
 
   const { logoutRequest } = userActionCreator;

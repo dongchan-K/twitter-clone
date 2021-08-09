@@ -18,7 +18,7 @@ const FormWrapper = styled(Form)`
 const LoginForm = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector(({ loading }) => ({
-    loading: loading['user/LOG_IN_REQUEST'],
+    loading: loading['user/loginRequest'],
   }));
 
   const { loginRequest } = userActionCreator;

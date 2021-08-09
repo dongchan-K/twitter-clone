@@ -11,7 +11,7 @@ const CommentForm = ({ post }) => {
   const { id, addCommentDone, loading } = useSelector((state) => ({
     id: state.user.myInfo,
     addCommentDone: state.post.addCommentDone,
-    loading: state.loading['user/ADD_COMMENT_REQUEST'],
+    loading: state.loading['post/addCommentRequest'],
   }));
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
 

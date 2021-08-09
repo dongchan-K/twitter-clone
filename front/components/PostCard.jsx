@@ -13,13 +13,14 @@ import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import { postActionCreator } from '../modules/post';
+import FollowButton from './FollowButton';
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   // ?. 옵셔널 체이닝 연산자 => myInfo가 null 또는 undefined일 경우 undefined를 반환, 그렇지 않으면 id를 참조
   const { id, loading } = useSelector((state) => ({
     id: state.user.myInfo?.id,
-    loading: state.loading['post/REMOVE_POST_REQUEST'],
+    loading: state.loading['post/removePostRequest'],
   }));
 
   const { removePostRequest } = postActionCreator;
@@ -37,7 +38,7 @@ const PostCard = ({ post }) => {
 
   const onRemovePost = useCallback(() => {
     dispatch(removePostRequest(post.id));
-  }, []);
+  }, [dispatch, post.id, removePostRequest]);
 
   return (
     <div style={{ marginBottom: 20 }}>
@@ -80,6 +81,7 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
+        extra={id && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}

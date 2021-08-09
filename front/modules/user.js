@@ -56,6 +56,26 @@ const userSlice = createSlice({
     changeNicknameFailure: (state, { payload: error }) => {
       state.userError = error;
     },
+    followRequest: (state, action) => {
+      return state;
+    },
+    followSuccess: (state, { payload }) => {
+      state.myInfo.Followings.push({ id: payload });
+    },
+    followFailure: (state, { payload: error }) => {
+      state.userError = error;
+    },
+    unFollowRequest: (state, action) => {
+      return state;
+    },
+    unFollowSuccess: (state, { payload }) => {
+      state.myInfo.Followings = state.myInfo.Followings.filter(
+        (Following) => Following.id !== payload,
+      );
+    },
+    unFollowFailure: (state, { payload: error }) => {
+      state.userError = error;
+    },
     addPostToMe: (state, { payload }) => {
       state.myInfo.Posts.unshift({ id: payload });
     },
