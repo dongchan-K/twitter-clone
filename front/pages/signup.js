@@ -121,7 +121,6 @@ const Signup = () => {
           </Button>
         </SubmitWrapper>
       </Form>
-      ;
     </Layout>
   );
 };

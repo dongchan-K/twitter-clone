@@ -15,7 +15,8 @@ import PostCardContent from './PostCardContent';
 import { postActionCreator } from '../modules/post';
 import FollowButton from './FollowButton';
 
-const PostCard = ({ post }) => {
+// forwardRef를 활용한 함수형 컴포넌트에서의 ref 사용
+const PostCard = React.forwardRef(({ post }, ref) => {
   const dispatch = useDispatch();
   // ?. 옵셔널 체이닝 연산자 => myInfo가 null 또는 undefined일 경우 undefined를 반환, 그렇지 않으면 id를 참조
   const { id, loading } = useSelector((state) => ({
@@ -41,7 +42,7 @@ const PostCard = ({ post }) => {
   }, [dispatch, post.id, removePostRequest]);
 
   return (
-    <div style={{ marginBottom: 20 }}>
+    <div ref={ref} style={{ marginBottom: 20 }}>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
@@ -107,12 +108,12 @@ const PostCard = ({ post }) => {
       />
     </div>
   );
-};
+});
 
 // shape를 사용하면 객체 같은 경우 더 구체적으로 type 지정 가능
 PostCard.propTypes = {
   post: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     User: PropTypes.object,
     content: PropTypes.string,
     createdAt: PropTypes.object,
